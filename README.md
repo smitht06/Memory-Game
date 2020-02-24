@@ -35,7 +35,7 @@ Your application must function as described below:
 
 #### Sample data
 Included are a handful of image files, but you are free to use others if you prefer.
-The [image files](images/) are all jpg, with [one](images/back-of-card.png) used to display the cards when they are face down and the others for when a card is face up.
+The [image files](src/images/) are all jpg, with [one](src/images/back-of-card.png) used to display the cards when they are face down and the others for when a card is face up.
 
 #### Demo
 Here is a demo of the gameplay. Note that this is not the only allowable format etc., this is _one_ right answer, not _the_ right answer.
