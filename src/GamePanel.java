@@ -26,7 +26,7 @@ public class GamePanel extends JPanel{
         imageOnBack = new ImageIcon(this.getClass().getResource("images/back-of-card.png"));
         setBackground(Color.BLUE);
         setVisible(true);
-         addButtons();
+        addButtons();
     }
 
     public void addButtons(){
@@ -36,8 +36,9 @@ public class GamePanel extends JPanel{
 
         for(int i = 0, j =0; i < imagePaths.length; i++){
             imageOnFront[j] = new ImageIcon(this.getClass().getResource(imagePaths[i]));
-
-
+            j = makeButtons(j);
+            imageOnFront[j] = imageOnFront[j-1];
+            j=makeButtons(j);
         }
         Random random = new Random();
         for(int i = 0; i < numberOfButtons; i++){
@@ -82,8 +83,11 @@ public class GamePanel extends JPanel{
                     if(score == 8){
                         JOptionPane.showMessageDialog(null,"You win!");
                         setGameOver(true);
+                        setVisible(false);
                     }
                 }
+            }else{
+                oddClick = index;
             }
         }
     }
@@ -102,7 +106,7 @@ public class GamePanel extends JPanel{
     }
 
     public void setImagePaths(String[] imagePaths) {
-        this.imagePaths = imagePaths;
+        GamePanel.imagePaths = imagePaths;
     }
 
     public int getNumberOfButtons() {
