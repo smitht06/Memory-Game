@@ -1,9 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 public class GamePanel extends JPanel{
-    private String[] imagPaths;
-    private int numButtons;
+    private String[] imagePaths;
+    private int numberOfButtons;
     private JButton[] buttonsArray;
     private ImageIcon imageOnBack;
     private ImageIcon[] imageOnFront;
@@ -24,7 +25,30 @@ public class GamePanel extends JPanel{
     }
 
     public void addButtons(){
+        numberOfButtons = imagePaths.length*2;
+        buttonsArray = new JButton[numberOfButtons];
+        imageOnFront = new ImageIcon[numberOfButtons];
 
+        for(int i = 0, j =0; i < imagePaths.length; i++){
+            imageOnFront[j] = new ImageIcon(this.getClass().getResource(imagePaths[i]));
+
+
+        }
+        Random random = new Random();
+        for(int i = 0; i < numberOfButtons; i++){
+            int j = random.nextInt(numberOfButtons);
+            temp = imageOnFront[i];
+            imageOnFront[i] = imageOnFront[j];
+            imageOnFront[j] = temp;
+        }
+        
+    }
+    private int makeButtons(int j){
+        buttonsArray[j] = new JButton();
+
+        buttonsArray[j].setIcon(imageOnBack);
+        add(buttonsArray[j++]);
+        return j;
     }
 
 }
