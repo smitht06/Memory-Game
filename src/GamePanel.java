@@ -1,8 +1,11 @@
 import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
+import java.util.*;
+import javax.swing.Timer;
 
 public class GamePanel extends JPanel{
     private static String[] imagePaths = {"images/bulbasaur.png","images/butterfree.png","images/dragonite.png","images/Eevee.png",
@@ -23,7 +26,8 @@ public class GamePanel extends JPanel{
     //construct the gameboard that will hold the buttons and pictures
     public GamePanel(){
         setLayout(new GridLayout(0,4,0,0));
-        imageOnBack = new ImageIcon(this.getClass().getResource("images/back-of-card.png"));
+        imageOnBack = new ImageIcon(this.getClass().getResource("images/back.jpg"));
+        imageOnBack = (ImageIcon) reSizeIcon(imageOnBack,200,200);
         setBackground(Color.BLUE);
         setVisible(true);
         addButtons();
@@ -36,9 +40,10 @@ public class GamePanel extends JPanel{
 
         for(int i = 0, j =0; i < imagePaths.length; i++){
             imageOnFront[j] = new ImageIcon(this.getClass().getResource(imagePaths[i]));
+            imageOnFront[j] = (ImageIcon) reSizeIcon(imageOnFront[j],200,200);
             j = makeButtons(j);
             imageOnFront[j] = imageOnFront[j-1];
-            j=makeButtons(j);
+            j = makeButtons(j);
         }
         Random random = new Random();
         for(int i = 0; i < numberOfButtons; i++){
@@ -47,11 +52,11 @@ public class GamePanel extends JPanel{
             imageOnFront[i] = imageOnFront[j];
             imageOnFront[j] = temp;
         }
-
+        timer = new Timer(1000, new TimerAction());
     }
     private int makeButtons(int j){
         buttonsArray[j] = new JButton();
-
+        buttonsArray[j].addActionListener(new GamePanel.ButtonListener());
         buttonsArray[j].setIcon(imageOnBack);
         add(buttonsArray[j++]);
         return j;
@@ -90,6 +95,21 @@ public class GamePanel extends JPanel{
                 oddClick = index;
             }
         }
+    }
+
+    private class TimerAction implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            buttonsArray[index].setIcon(imageOnBack);
+            buttonsArray[oddClick].setIcon(imageOnBack);
+            timer.stop();
+        }
+    }
+
+    private static Icon reSizeIcon(ImageIcon picture, int width, int height){
+        Image imgHolder = picture.getImage();
+        Image resizedPicture = imgHolder.getScaledInstance(width,height,Image.SCALE_DEFAULT);
+        return new ImageIcon(resizedPicture);
     }
 
 
