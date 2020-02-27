@@ -1,6 +1,5 @@
 import javax.swing.*;
 import javax.swing.ImageIcon;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +21,9 @@ public class GamePanel extends JPanel{
     private Timer timer;
     private int numFlippedCards;
     private boolean gameOver = false;
+    private int playerOnesScore;
+    private int playerTwosScore;
+    private boolean turnKeeper;
 
     //construct the gameboard that will hold the buttons and pictures
     public GamePanel(){
@@ -66,25 +68,48 @@ public class GamePanel extends JPanel{
         public void actionPerformed(ActionEvent e){
             if(timer.isRunning()){
                 return;
-            }numFlippedCards++;
+            }
+            numFlippedCards++;
             for(int i = 0; i < numberOfButtons; i++){
                 if(e.getSource()==buttonsArray[i]){
                     buttonsArray[i].setIcon(imageOnFront[i]);
                     index = i;
                 }
             }
+
+
             if(numFlippedCards % 2 == 0){
                 if(index == oddClick){
                     numberOfClicks--;
                     return;
                 }
                 if(imageOnFront[index] != imageOnFront[oddClick]){
+                    nextPlayersTurn();
+                    turnKeeper = !turnKeeper;
                     timer.start();
-                }else{
+                }else if(turnKeeper == false){
+                    System.out.println("player 2s turn");
                     buttonsArray[index].setEnabled(false);
                     buttonsArray[oddClick].setEnabled(false);
-                    score++;
-                    System.out.println("Match found!" + score);
+                    playerTwosScore++;
+                    //System.out.println("Match found!" + score);
+                    nextPlayersTurn();
+                    turnKeeper = true;
+                    System.out.println("Player 2's score: "+playerTwosScore);
+                    if(score == 8){
+                        JOptionPane.showMessageDialog(null,"You win!");
+                        setGameOver(true);
+                        setVisible(false);
+                    }
+                }else if(turnKeeper == true){
+                    System.out.println("player 1's turn");
+                    buttonsArray[index].setEnabled(false);
+                    buttonsArray[oddClick].setEnabled(false);
+                    playerOnesScore++;
+                    //System.out.println("Match found!" + score);
+                    nextPlayersTurn();
+                    System.out.println("Player 1's score: "+playerOnesScore);
+                    turnKeeper = false;
                     if(score == 8){
                         JOptionPane.showMessageDialog(null,"You win!");
                         setGameOver(true);
@@ -96,6 +121,12 @@ public class GamePanel extends JPanel{
             }
         }
     }
+
+
+    private void nextPlayersTurn(){
+        System.out.println("Next player's turn");
+    }
+
 
     private class TimerAction implements ActionListener{
         @Override
