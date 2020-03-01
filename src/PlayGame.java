@@ -6,8 +6,8 @@
  * Purpose: This class is is the main class that runs the game
  * */
 
-import java.awt.*;
 
+//main class creates window and add the game frame to run the game
 public class PlayGame {
     public static void main(String[] args) {
         GameWindow game = new GameWindow();

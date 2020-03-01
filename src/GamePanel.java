@@ -6,6 +6,7 @@
  * Purpose: This class is an extension of JPanel. It creats the game panel and contains all game and button logic for the memory game
  * */
 
+//imports
 import javax.swing.*;
 import javax.swing.ImageIcon;
 import java.awt.*;
@@ -15,6 +16,7 @@ import java.util.*;
 import javax.swing.Timer;
 
 public class GamePanel extends JPanel{
+    //declare all global variables including two string with the image file paths
     private static final String[] IMAGEPATHS = {"images/bulbasaur.png","images/butterfree.png","images/dragonite.png","images/Eevee.png",
             "images/Meowth.png","images/nidoran.png","images/pikachu.png","images/wartortle.png"} ;
     private static final String BACKIMAGEPATH = "images/back.jpg";
@@ -40,11 +42,15 @@ public class GamePanel extends JPanel{
         addButtons();
     }
 
+    //method to add buttons to the Jframe
     public void addButtons(){
+        //set number of buttons to the number of pictures times 2
+        //populate arrays with picture and button objects
         numberOfButtons = IMAGEPATHS.length*2;
         buttonsArray = new JButton[numberOfButtons];
         imageOnFront = new ImageIcon[numberOfButtons];
 
+        //for loop assigns images to array and calls the make buttons method
         for(int i = 0, j = 0; i < IMAGEPATHS.length; i++){
             imageOnFront[j] = new ImageIcon(this.getClass().getResource(IMAGEPATHS[i]));
             imageOnFront[j] = (ImageIcon) reSizeIcon(imageOnFront[j],200,200);
@@ -52,6 +58,7 @@ public class GamePanel extends JPanel{
             imageOnFront[j] = imageOnFront[j-1];
             j = makeButtons(j);
         }
+        //randomizer randomizes image placements
         Random random = new Random();
         for(int i = 0; i < numberOfButtons; i++){
             int j = random.nextInt(numberOfButtons);
@@ -61,6 +68,8 @@ public class GamePanel extends JPanel{
         }
         timer = new Timer(1000, new TimerAction());
     }
+    //method to make buttons, also adds action listener to button
+    //sets image on the back of the card
     private int makeButtons(int j){
         buttonsArray[j] = new JButton();
         buttonsArray[j].addActionListener(new GamePanel.ButtonListener());
@@ -69,6 +78,7 @@ public class GamePanel extends JPanel{
         return j;
     }
 
+    //listener for buttons
     private class ButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent e){
             if(timer.isRunning()){
@@ -82,13 +92,14 @@ public class GamePanel extends JPanel{
                 }
             }
 
-
+            //dont allow same card to be clicked twice
             if(numFlippedCards % 2 == 0){
                 if(index == oddClick){
                     numFlippedCards--;
                     return;
                 }
                 if(imageOnFront[index] != imageOnFront[oddClick]){
+                    //two player game, keeps track of turn
                     if(turnKeeper == true){
                         System.out.println("Player 2's turn");
                     }else{
@@ -96,10 +107,10 @@ public class GamePanel extends JPanel{
                     }
                     turnKeeper = !turnKeeper;
                     timer.start();
+                    //player 1 score keeper and tracks winner
                 }else if(!turnKeeper){
                     disableButton();
                     playerTwosScore++;
-
                     turnKeeper = true;
                     System.out.println("Player 2's score: "+playerTwosScore);
                     if(playerTwosScore == 8){
@@ -107,6 +118,7 @@ public class GamePanel extends JPanel{
                         setGameOver(true);
                         setVisible(false);
                     }
+                    //player 1 score keeper and tracks winner
                 }else if(turnKeeper){
                     disableButton();
                     playerOnesScore++;
@@ -125,11 +137,13 @@ public class GamePanel extends JPanel{
         }
     }
 
+    //method disables buttons that a player has found matches for
     private void disableButton() {
         buttonsArray[index].setEnabled(false);
         buttonsArray[oddClick].setEnabled(false);
     }
 
+    //timer lister to wait a few seconds befor ecards flip
     private class TimerAction implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -139,13 +153,14 @@ public class GamePanel extends JPanel{
         }
     }
 
+    //method to resize photos
     private static Icon reSizeIcon(ImageIcon picture, int width, int height){
         Image imgHolder = picture.getImage();
         Image resizedPicture = imgHolder.getScaledInstance(width,height,Image.SCALE_DEFAULT);
         return new ImageIcon(resizedPicture);
     }
 
-
+    //setter mthod to tell when the game is over
     public void setGameOver(boolean gameOver) {
     }
 
