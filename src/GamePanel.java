@@ -7,28 +7,25 @@ import java.util.*;
 import javax.swing.Timer;
 
 public class GamePanel extends JPanel{
-    private static String[] imagePaths = {"images/bulbasaur.png","images/butterfree.png","images/dragonite.png","images/Eevee.png",
+    private static final String[] IMAGEPATHS = {"images/bulbasaur.png","images/butterfree.png","images/dragonite.png","images/Eevee.png",
             "images/Meowth.png","images/nidoran.png","images/pikachu.png","images/wartortle.png"} ;
+    private static final String BACKIMAGEPATH = "images/back.jpg";
     private int numberOfButtons;
     private JButton[] buttonsArray;
     private ImageIcon imageOnBack;
     private ImageIcon[] imageOnFront;
-    private ImageIcon temp;
-    private int score = 0;
     private int index = 0;
     private int oddClick = 0;
-    private int numberOfClicks = 0;
     private Timer timer;
     private int numFlippedCards;
-    private boolean gameOver = false;
-    private int playerOnesScore;
-    private int playerTwosScore;
+    private int playerOnesScore = 0;
+    private int playerTwosScore = 0;
     private boolean turnKeeper;
 
     //construct the gameboard that will hold the buttons and pictures
     public GamePanel(){
         setLayout(new GridLayout(0,4,0,0));
-        imageOnBack = new ImageIcon(this.getClass().getResource("images/back.jpg"));
+        imageOnBack = new ImageIcon(this.getClass().getResource(BACKIMAGEPATH));
         imageOnBack = (ImageIcon) reSizeIcon(imageOnBack,200,200);
         setBackground(Color.BLUE);
         setVisible(true);
@@ -36,12 +33,12 @@ public class GamePanel extends JPanel{
     }
 
     public void addButtons(){
-        numberOfButtons = imagePaths.length*2;
+        numberOfButtons = IMAGEPATHS.length*2;
         buttonsArray = new JButton[numberOfButtons];
         imageOnFront = new ImageIcon[numberOfButtons];
 
-        for(int i = 0, j =0; i < imagePaths.length; i++){
-            imageOnFront[j] = new ImageIcon(this.getClass().getResource(imagePaths[i]));
+        for(int i = 0, j = 0; i < IMAGEPATHS.length; i++){
+            imageOnFront[j] = new ImageIcon(this.getClass().getResource(IMAGEPATHS[i]));
             imageOnFront[j] = (ImageIcon) reSizeIcon(imageOnFront[j],200,200);
             j = makeButtons(j);
             imageOnFront[j] = imageOnFront[j-1];
@@ -50,7 +47,7 @@ public class GamePanel extends JPanel{
         Random random = new Random();
         for(int i = 0; i < numberOfButtons; i++){
             int j = random.nextInt(numberOfButtons);
-            temp = imageOnFront[i];
+            ImageIcon temp = imageOnFront[i];
             imageOnFront[i] = imageOnFront[j];
             imageOnFront[j] = temp;
         }
@@ -80,37 +77,35 @@ public class GamePanel extends JPanel{
 
             if(numFlippedCards % 2 == 0){
                 if(index == oddClick){
-                    numberOfClicks--;
+                    numFlippedCards--;
                     return;
                 }
                 if(imageOnFront[index] != imageOnFront[oddClick]){
-                    nextPlayersTurn();
+                    if(turnKeeper == true){
+                        System.out.println("Player 2's turn");
+                    }else{
+                        System.out.println("Player 1's turn");
+                    }
                     turnKeeper = !turnKeeper;
                     timer.start();
-                }else if(turnKeeper == false){
-                    System.out.println("player 2s turn");
-                    buttonsArray[index].setEnabled(false);
-                    buttonsArray[oddClick].setEnabled(false);
+                }else if(!turnKeeper){
+                    disableButton();
                     playerTwosScore++;
-                    //System.out.println("Match found!" + score);
-                    nextPlayersTurn();
+
                     turnKeeper = true;
                     System.out.println("Player 2's score: "+playerTwosScore);
-                    if(score == 8){
+                    if(playerTwosScore == 8){
                         JOptionPane.showMessageDialog(null,"You win!");
                         setGameOver(true);
                         setVisible(false);
                     }
-                }else if(turnKeeper == true){
-                    System.out.println("player 1's turn");
-                    buttonsArray[index].setEnabled(false);
-                    buttonsArray[oddClick].setEnabled(false);
+                }else if(turnKeeper){
+                    disableButton();
                     playerOnesScore++;
-                    //System.out.println("Match found!" + score);
-                    nextPlayersTurn();
+
                     System.out.println("Player 1's score: "+playerOnesScore);
                     turnKeeper = false;
-                    if(score == 8){
+                    if(playerOnesScore == 8){
                         JOptionPane.showMessageDialog(null,"You win!");
                         setGameOver(true);
                         setVisible(false);
@@ -122,11 +117,10 @@ public class GamePanel extends JPanel{
         }
     }
 
-
-    private void nextPlayersTurn(){
-        System.out.println("Next player's turn");
+    private void disableButton() {
+        buttonsArray[index].setEnabled(false);
+        buttonsArray[oddClick].setEnabled(false);
     }
-
 
     private class TimerAction implements ActionListener{
         @Override
@@ -144,107 +138,8 @@ public class GamePanel extends JPanel{
     }
 
 
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
     public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
     }
 
-    public String[] getImagePaths() {
-        return imagePaths;
-    }
 
-    public void setImagePaths(String[] imagePaths) {
-        GamePanel.imagePaths = imagePaths;
-    }
-
-    public int getNumberOfButtons() {
-        return numberOfButtons;
-    }
-
-    public void setNumberOfButtons(int numberOfButtons) {
-        this.numberOfButtons = numberOfButtons;
-    }
-
-    public JButton[] getButtonsArray() {
-        return buttonsArray;
-    }
-
-    public void setButtonsArray(JButton[] buttonsArray) {
-        this.buttonsArray = buttonsArray;
-    }
-
-    public ImageIcon getImageOnBack() {
-        return imageOnBack;
-    }
-
-    public void setImageOnBack(ImageIcon imageOnBack) {
-        this.imageOnBack = imageOnBack;
-    }
-
-    public ImageIcon[] getImageOnFront() {
-        return imageOnFront;
-    }
-
-    public void setImageOnFront(ImageIcon[] imageOnFront) {
-        this.imageOnFront = imageOnFront;
-    }
-
-    public ImageIcon getTemp() {
-        return temp;
-    }
-
-    public void setTemp(ImageIcon temp) {
-        this.temp = temp;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public int getOddClick() {
-        return oddClick;
-    }
-
-    public void setOddClick(int oddClick) {
-        this.oddClick = oddClick;
-    }
-
-    public int getNumberOfClicks() {
-        return numberOfClicks;
-    }
-
-    public void setNumberOfClicks(int numberOfClicks) {
-        this.numberOfClicks = numberOfClicks;
-    }
-
-    public Timer getTimer() {
-        return timer;
-    }
-
-    public void setTimer(Timer timer) {
-        this.timer = timer;
-    }
-
-    public int getNumFlippedCards() {
-        return numFlippedCards;
-    }
-
-    public void setNumFlippedCards(int numFlippedCards) {
-        this.numFlippedCards = numFlippedCards;
-    }
 }
