@@ -1,3 +1,11 @@
+/*
+ * File: GamePanel.java
+ * Author: Anthony Smith
+ * Date: 3/1/2020
+ * Course: COP 5007
+ * Purpose: This class is an extension of JPanel. It creats the game panel and contains all game and button logic for the memory game
+ * */
+
 import javax.swing.*;
 import javax.swing.ImageIcon;
 import java.awt.*;
