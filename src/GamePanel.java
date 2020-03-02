@@ -101,9 +101,9 @@ public class GamePanel extends JPanel{
                 if(imageOnFront[index] != imageOnFront[oddClick]){
                     //two player game, keeps track of turn
                     if(turnKeeper == true){
-                        System.out.println("Player 2's turn");
-                    }else{
                         System.out.println("Player 1's turn");
+                    }else{
+                        System.out.println("Player 2's turn");
                     }
                     turnKeeper = !turnKeeper;
                     timer.start();
@@ -113,8 +113,8 @@ public class GamePanel extends JPanel{
                     playerTwosScore++;
                     turnKeeper = true;
                     System.out.println("Player 2's score: "+playerTwosScore);
-                    if(playerTwosScore == 8){
-                        JOptionPane.showMessageDialog(null,"You win!");
+                    if(playerTwosScore == 5){
+                        JOptionPane.showMessageDialog(null,"Player 2, You win!");
                         setGameOver(true);
                         setVisible(false);
                     }
@@ -125,8 +125,8 @@ public class GamePanel extends JPanel{
 
                     System.out.println("Player 1's score: "+playerOnesScore);
                     turnKeeper = false;
-                    if(playerOnesScore == 8){
-                        JOptionPane.showMessageDialog(null,"You win!");
+                    if(playerOnesScore == 5){
+                        JOptionPane.showMessageDialog(null,"Player 1, You win!");
                         setGameOver(true);
                         setVisible(false);
                     }
