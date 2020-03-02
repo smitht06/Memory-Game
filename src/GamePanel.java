@@ -3,7 +3,7 @@
  * Author: Anthony Smith
  * Date: 3/1/2020
  * Course: COP 5007
- * Purpose: This class is an extension of JPanel. It creats the game panel and contains all game and button logic for the memory game
+ * Purpose: This class is an extension of JPanel. It creates the game panel and contains all game and button logic for the memory game
  * */
 
 //imports
@@ -160,7 +160,7 @@ public class GamePanel extends JPanel{
         return new ImageIcon(resizedPicture);
     }
 
-    //setter mthod to tell when the game is over
+    //setter method to tell when the game is over
     public void setGameOver(boolean gameOver) {
     }
 
