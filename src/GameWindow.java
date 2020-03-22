@@ -2,7 +2,6 @@
  * File: GameWindow.java
  * Author: Anthony Smith
  * Date: 3/1/2020
- * Course: COP 5007
  * Purpose: This class is an extension of JFrame. it builds the window and places the GameFrame on top.
  * */
 import javax.swing.*;
